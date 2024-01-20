@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { getHelpDesk } from '@/api/get-helpdesk'
 import { HelpDeskFilter } from '@/components/helpdesk-filter'
 
-import { HelpDeskDetail } from './hepdesk-detail'
+import { HelpDeskDetail } from './helpdesk-detail'
 
 export function HelpDesks() {
   const { data } = useQuery({
