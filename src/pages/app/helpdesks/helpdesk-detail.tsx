@@ -21,7 +21,6 @@ interface FileProps {
   filename: string
   mimetype: string
 }
-
 interface HelpDeskDetailsProps {
   id: string
   author: string
@@ -71,7 +70,7 @@ export function HelpDeskDetail({
               <MessageSquareShare />
             </Button>
           </DialogTrigger>
-          <HelpDeskChatModal />
+          <HelpDeskChatModal id={id} />
         </Dialog>
         <Badge variant="secondary">{id}</Badge>
       </CardFooter>
