@@ -1,7 +1,7 @@
 import { Paperclip, SendHorizontal } from 'lucide-react'
 import { useQuery } from 'react-query'
 
-import { getHelpDesk } from '@/api/get-helpdesk'
+import { getHelpDeskMessage } from '@/api/get-helpdesk-message'
 import { HelpDeskMessage } from '@/components/helpdesk-message'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,27 +10,41 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+interface HelpDeskChatModalProps {
+  id: string
+}
 
-export function HelpDeskChatModal() {
-  const { data } = useQuery({
-    queryKey: ['helpdesk'],
-    queryFn: getHelpDesk,
+interface MessageProps {
+  id: string
+  user: {
+    name: string
+  }
+  message: string
+}
+
+export function HelpDeskChatModal({ id }: HelpDeskChatModalProps) {
+  const { data: comment } = useQuery({
+    queryKey: ['helpdesk-message', id],
+    queryFn: () => getHelpDeskMessage(id),
     refetchOnWindowFocus: false,
   })
-
-  console.log(data![0].comments.message)
 
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Chamado: 1232393732</DialogTitle>
+        <DialogTitle>{id}</DialogTitle>
       </DialogHeader>
 
       <div className="h-[500px] space-y-6 rounded border">
-        <HelpDeskMessage
-          author={data![0].user.name}
-          message={data![0].comments.message}
-        />
+        {comment &&
+          comment.length > 0 &&
+          comment.map((comment: MessageProps) => (
+            <HelpDeskMessage
+              key={comment.id}
+              author={comment.user.name}
+              message={comment.message}
+            />
+          ))}
       </div>
       <form className="flex flex-row items-center space-x-2">
         <Input
