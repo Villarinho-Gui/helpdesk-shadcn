@@ -8,13 +8,13 @@ interface FileProps {
 
 interface GetHelpDeskResponse {
   id: string
+  category: string
+  title: string
+  description: string
   user: {
     name: string
   }
   accountable: string
-  title: string
-  category: string
-  description: string
   files?: FileProps[]
   countFiles: number
   status: string
