@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+import { env } from '@/env'
+
 export default axios.create({
-  baseURL: 'http://localhost:3545',
+  baseURL: env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
