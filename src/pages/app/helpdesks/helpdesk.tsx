@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
-import { useQuery } from 'react-query'
 
 import { getHelpDesk } from '@/api/get-helpdesk'
 import { HelpDeskFilter } from '@/components/helpdesk-filter'
