@@ -1,5 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { Paperclip, SendHorizontal } from 'lucide-react'
-import { useQuery } from 'react-query'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { getHelpDeskMessage } from '@/api/get-helpdesk-message'
 import { HelpDeskMessage } from '@/components/helpdesk-message'
@@ -11,10 +14,9 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 interface HelpDeskChatModalProps {
-  id: string
+  helpdeskId: string
 }
-
-interface MessageProps {
+interface CommentProps {
   id: string
   user: {
     name: string
@@ -22,34 +24,45 @@ interface MessageProps {
   message: string
 }
 
-export function HelpDeskChatModal({ id }: HelpDeskChatModalProps) {
+const PostMessageFormSchema = z.object({
+  message: z.string().min(1),
+  helpdeskId: z.string().uuid(),
+})
+
+type PostMessageForm = z.infer<typeof PostMessageFormSchema>
+
+export function HelpDeskChatModal({ helpdeskId }: HelpDeskChatModalProps) {
+  const {
+    register,
+    formState: { isSubmitting },
+  } = useForm<PostMessageForm>({
+    resolver: zodResolver(PostMessageFormSchema),
+  })
+
   const { data: comment } = useQuery({
-    queryKey: ['helpdesk-message', id],
-    queryFn: () => getHelpDeskMessage(id),
+    queryKey: ['helpdesk-message', helpdeskId],
+    queryFn: () => getHelpDeskMessage(helpdeskId),
     refetchOnWindowFocus: false,
   })
 
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>{id}</DialogTitle>
+        <DialogTitle>Chamado: {helpdeskId}</DialogTitle>
       </DialogHeader>
 
-      <div className="h-[500px] space-y-6 rounded border">
+      <div className="h-[500px] space-y-6 overflow-auto rounded border p-2">
         {comment &&
           comment.length > 0 &&
-          comment.map((comment: MessageProps) => (
-            <HelpDeskMessage
-              key={comment.id}
-              author={comment.user.name}
-              message={comment.message}
-            />
+          comment.map(({ id, message, user }: CommentProps) => (
+            <HelpDeskMessage key={id} author={user.name} message={message} />
           ))}
       </div>
-      <form className="flex flex-row items-center space-x-2">
+      <form className="flex flex-row items-center space-x-2" method="post">
         <Input
           className="h-max text-wrap"
           placeholder="Escreva uma mensagem..."
+          {...register('message')}
         />
 
         <Button variant="ghost" type="button">
@@ -57,7 +70,7 @@ export function HelpDeskChatModal({ id }: HelpDeskChatModalProps) {
           <Paperclip />
         </Button>
 
-        <Button variant="default">
+        <Button variant="default" type="submit" disabled={isSubmitting}>
           <SendHorizontal />
         </Button>
       </form>
