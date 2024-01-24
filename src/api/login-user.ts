@@ -1,5 +1,4 @@
-import api from '.'
-
+import axios from '@/lib/axios'
 export interface LoginUserProps {
   email: string
   password: string
@@ -7,7 +6,7 @@ export interface LoginUserProps {
 }
 
 export async function LoginUser({ email, password }: LoginUserProps) {
-  const response = await api.post('/auth/login', { email, password })
+  const response = await axios.post('/auth/login', { email, password })
   const token = response.data.access_token
   localStorage.setItem('access_token', token!)
   return token

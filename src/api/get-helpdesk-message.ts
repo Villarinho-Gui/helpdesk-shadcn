@@ -1,4 +1,4 @@
-import api from '.'
+import axios from '@/lib/axios'
 
 const token = localStorage.getItem('access_token')
 const headers = {
@@ -8,6 +8,6 @@ const headers = {
 }
 
 export async function getHelpDeskMessage(id: string | undefined) {
-  const response = await api.get(`/comment/${id}`, headers)
+  const response = await axios.get(`/comment/${id}`, headers)
   return response.data
 }

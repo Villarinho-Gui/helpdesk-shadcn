@@ -1,5 +1,4 @@
-import api from '.'
-
+import axios from '@/lib/axios'
 export interface RegisterUserProps {
   name: string
   email: string
@@ -15,5 +14,11 @@ export async function registerUser({
   sector,
   extension,
 }: RegisterUserProps) {
-  await api.post('/auth/register', { name, email, password, sector, extension })
+  await axios.post('/auth/register', {
+    name,
+    email,
+    password,
+    sector,
+    extension,
+  })
 }

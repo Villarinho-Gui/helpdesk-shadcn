@@ -1,4 +1,4 @@
-import api from '.'
+import axios from '@/lib/axios'
 
 interface PostHelpDeskMessageProps {
   message: string
@@ -17,6 +17,10 @@ export async function postHelpDeskMessage({
   message,
   helpdeskId,
 }: PostHelpDeskMessageProps) {
-  const response = await api.post('/comment', { message, helpdeskId }, headers)
+  const response = await axios.post(
+    '/comment',
+    { message, helpdeskId },
+    headers,
+  )
   return response
 }

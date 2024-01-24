@@ -1,11 +1,9 @@
-import api from '.'
-
+import axios from '@/lib/axios'
 interface FileProps {
   id: string
   filename: string
   mimetype: string
 }
-
 interface GetHelpDeskResponse {
   id: string
   category: string
@@ -33,6 +31,6 @@ const headers = {
 }
 
 export async function getHelpDesk() {
-  const response = await api.get<GetHelpDeskResponse[]>('/helpdesk', headers)
+  const response = await axios.get<GetHelpDeskResponse[]>('/helpdesk', headers)
   return response.data
 }
