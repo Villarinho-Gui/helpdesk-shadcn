@@ -17,10 +17,5 @@ export async function postHelpDeskMessage({
   message,
   helpdeskId,
 }: PostHelpDeskMessageProps) {
-  const response = await axios.post(
-    '/comment',
-    { message, helpdeskId },
-    headers,
-  )
-  return response
+  return await axios.post('/comment', { message, helpdeskId }, headers)
 }
